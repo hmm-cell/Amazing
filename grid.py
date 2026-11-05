@@ -32,21 +32,32 @@ class Grid:
             raise ValueError("width and height must be biigger than (idk yet)")
         self.width = width
         self.height = height
-        self.matrix = [[ALL for _ in range(height)] for _ in range(width)]
+        self.matrix = [[ALL for _ in range(width)] for _ in range(height)]
 
 #wall remover method, removes specific walls based on where the algo is randomly moving to
 
     def remove_wall(self, x: int, y: int, direction: int) -> None:
-        # remove wall from current cell! ~negative bitwise operator. ~0001 = 1110
-        # &operator is to check the ~direction vs the current cell and lets say 1111 to &1110 then we get 1110.
-        # but if its &1110 and the cell is 1110, nothing is changed!
-        self.matrix[x][y] &= ~direction
-
         #get coord movements and opposite wall from  DIRECTIONS cosnt
         dx, dy, opposite_wall = DIRECTIONS[direction]
 
         #go to the next direction
-        nx, ny = dx + x, dy  + y
-        
-        #self.matrix[][]
+        nx = x + dx
+        ny = y + dy
 
+        if not ((0 <= nx < self.width) and (0 <= ny < self.height)):
+            raise ValueError("out of bounds")
+
+        # remove wall from current cell! ~negative bitwise operator. ~0001 = 1110
+        # &operator is to check the ~direction vs the current cell and lets say 1111 to &1110 then we get 1110.
+        # but if its &1110 and the cell is 1110, nothing is changed!
+        self.matrix[y][x] &= ~direction
+        self.matrix[ny][nx] &= ~opposite_wall
+
+#teste
+g = Grid(5, 3)
+g.remove_wall(2, 0, S)
+print(g.matrix[0][2], g.matrix[1][2])
+try:
+    g.remove_wall(2, 0, N)
+except ValueError as e:
+    print("caught:", e)
