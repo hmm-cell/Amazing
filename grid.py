@@ -26,9 +26,27 @@ DIRECTIONS: Dict[int, tuple[int, int, int]] = {
 class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
 
+#grid generator method, it puts every cell of the matrix at ALL(15) value
     def __init__(self, width: int, height: int):
         if width < 1 or height < 1:
             raise ValueError("width and height must be biigger than (idk yet)")
         self.width = width
         self.height = height
-        self.matrix = [[ALL for _ in range(width)] for _ in range(height)]
+        self.matrix = [[ALL for _ in range(height)] for _ in range(width)]
+
+#wall remover method, removes specific walls based on where the algo is randomly moving to
+
+    def remove_wall(self, x: int, y: int, direction: int) -> None:
+        # remove wall from current cell! ~negative bitwise operator. ~0001 = 1110
+        # &operator is to check the ~direction vs the current cell and lets say 1111 to &1110 then we get 1110.
+        # but if its &1110 and the cell is 1110, nothing is changed!
+        self.matrix[x][y] &= ~direction
+
+        #get coord movements and opposite wall from  DIRECTIONS cosnt
+        dx, dy, opposite_wall = DIRECTIONS[direction]
+
+        #go to the next direction
+        nx, ny = dx + x, dy  + y
+        
+        #self.matrix[][]
+
