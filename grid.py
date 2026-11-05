@@ -10,7 +10,7 @@ ALL = N | E | S | W #all sides walled 1111
 # IMPORTANT to decide which direction you want to move
 
 direction: Dict[int, tuple[int, int, int]] = {
-
+    
 }
 
 class Grid:
