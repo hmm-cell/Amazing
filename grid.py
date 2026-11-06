@@ -86,7 +86,7 @@ class Grid:
         # call is_fixed_cell to know if we are inside a locked cell or going to a locked cell
         # if in locked cell or going to locked cell no removal of wall
         if self.is_fixed_cell(x, y) or self.is_fixed_cell(nx, ny):
-            return # retrurn cuz idk how algo will work with this
+            raise ValueError("going to locked cell or in locked cell")
         
         # remove wall from current cell! ~negative bitwise operator. ~0001 = 1110
         # &operator is to check the ~direction vs the current cell and lets say 1111 to &1110 then we get 1110.
