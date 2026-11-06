@@ -9,34 +9,39 @@ ALL = N | E | S | W #all sides walled 1111
 
 # IMPORTANT. direction is used to determine where youll move to.
 
-# For example if youre at (y=3, x=2) and you move N youll end up at (y=2, x=2).
-# Moving N from (3, 2) to (2, 2) means removing the N wall from (3, 2) and the S wall from (2, 2).
+# For example if youre at (x=2, y=3) and you move N youll end up at (x=2, y=2).
+# Moving N from (2, 3) to (2, 2) means removing the N wall from (2, 3) and the S wall from (2, 2).
 # Hence N has S as the third value in the dict. It tells the future
 # wall remover function which wall to remove on the new cell.
 
 # This repeats for all directions with their respective opposite: (N-S), (W-E)
-# Everything in this project is (y, x): row first, then column.
+# Everything in this project is (x, y): column first, then row.
+# The matrix itself is stored as matrix[y][x] (rows first), like the output file.
 
 DIRECTIONS: Dict[int, tuple[int, int, int]] = {
-    N: (-1, 0, S),
-    S: (1, 0, N),
-    E: (0, 1, W),
-    W: (0, -1, E),
+    N: (0, -1, S),
+    S: (0, 1, N),
+    E: (1, 0, W),
+    W: (-1, 0, E),
 }
 
-#cell PATTERN of 42 symbol with its coords
+#cell PATTERN of 42 symbol with its coords (x, y)
 
-PATTERN_42: Set[tuple[int, int]] = {
+PATTERN_42: set[tuple[int, int]] = {
     #4 shape
-    (0, 0), (1, 0), (2, 0),
-    (2, 1), (2, 2), (1, 2),
-    (0, 2), (3, 2), (4, 2),
+    (0, 0), (0, 1), (0, 2),
+    (1, 2), (2, 2), (2, 1),
+    (2, 0), (2, 3), (2, 4),
 
     #2 shape
-    (0, 5), (0, 6), (0, 7),
-    (1, 7), (2, 7), (2, 6),
-    (2, 5), (3, 5), (4, 5), 
-    (4, 6), (4, 7) 
+    (5, 0), (6, 0), (7, 0),
+    (7, 1), (7, 2), (6, 2),
+    (5, 2), (5, 3), (5, 4),
+    (6, 4), (7, 4)
+}
+#center of the 42 shape (4, 2) to make calcuation of center in grid easier
+CENTER_42: set[tuple[int, int]] = {
+    (4, 2)
 }
 
 class Grid:
@@ -52,15 +57,15 @@ class Grid:
 
 #wall remover method, removes specific walls based on where the algo is randomly moving to
 
-    def remove_wall(self, y: int, x: int, direction: int) -> None:
+    def remove_wall(self, x: int, y: int, direction: int) -> None:
         #get coord movements and opposite wall from  DIRECTIONS cosnt
-        dy, dx, opposite_wall = DIRECTIONS[direction]
+        dx, dy, opposite_wall = DIRECTIONS[direction]
 
         #go to the next direction
-        ny = y + dy
         nx = x + dx
+        ny = y + dy
 
-        if not ((0 <= ny < self.height) and (0 <= nx < self.width)):
+        if not ((0 <= nx < self.width) and (0 <= ny < self.height)):
             raise ValueError("out of bounds")
 
         # remove wall from current cell! ~negative bitwise operator. ~0001 = 1110
@@ -71,9 +76,9 @@ class Grid:
 
 #teste
 g = Grid(5, 3)
-g.remove_wall(0, 2, S)
+g.remove_wall(2, 0, S)
 print(g.matrix[0][2], g.matrix[1][2])   # expect 11 14
 try:
-    g.remove_wall(0, 2, N)
+    g.remove_wall(2, 0, N)
 except ValueError as e:
     print("caught:", e)
