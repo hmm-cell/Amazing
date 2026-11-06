@@ -23,6 +23,25 @@ DIRECTIONS: Dict[int, tuple[int, int, int]] = {
     W: (-1, 0, E),
 }
 
+#cell PATTERN of 42 symbol with its coords
+
+PATTERN_42: Set[tuple[int, int]] = {
+    #4 shape
+    (0, 0), (1, 0), (2, 0),
+    (2, 1), (2, 2), (1, 2),
+    (0, 2), (3, 2), (4, 2),
+
+    #2 shape
+    (0, 5), (0, 6), (0, 7),
+    (1, 7), (2, 7), (2, 6),
+    (2, 5), (3, 5), (4, 5), 
+    (4, 6), (4, 7) 
+}
+#center of the 42 shape (2, 4) to make calcuation of center in grid easier
+CENTER_42: Set[tuple[int, int]] = {
+    (2, 4)
+}
+
 class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
 
@@ -33,6 +52,8 @@ class Grid:
         self.width = width
         self.height = height
         self.matrix = [[ALL for _ in range(width)] for _ in range(height)]
+
+    
 
 #wall remover method, removes specific walls based on where the algo is randomly moving to
 
@@ -52,6 +73,8 @@ class Grid:
         # but if its &1110 and the cell is 1110, nothing is changed!
         self.matrix[y][x] &= ~direction
         self.matrix[ny][nx] &= ~opposite_wall
+
+    def 
 
 #teste
 g = Grid(5, 3)
