@@ -37,10 +37,6 @@ PATTERN_42: Set[tuple[int, int]] = {
     (2, 5), (3, 5), (4, 5), 
     (4, 6), (4, 7) 
 }
-#center of the 42 shape (2, 4) to make calcuation of center in grid easier
-CENTER_42: Set[tuple[int, int]] = {
-    (2, 4)
-}
 
 class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
@@ -57,13 +53,13 @@ class Grid:
 
 #wall remover method, removes specific walls based on where the algo is randomly moving to
 
-    def remove_wall(self, x: int, y: int, direction: int) -> None:
+    def remove_wall(self, y: int, x: int, direction: int) -> None:
         #get coord movements and opposite wall from  DIRECTIONS cosnt
         dx, dy, opposite_wall = DIRECTIONS[direction]
 
         #go to the next direction
-        nx = x + dx
         ny = y + dy
+        nx = x + dx
 
         if not ((0 <= nx < self.width) and (0 <= ny < self.height)):
             raise ValueError("out of bounds")
