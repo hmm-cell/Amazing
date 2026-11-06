@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Set
 
 #each orientation with its bit value
 N = 1 #wall at north 0001
@@ -39,10 +39,6 @@ PATTERN_42: set[tuple[int, int]] = {
     (5, 2), (5, 3), (5, 4),
     (6, 4), (7, 4)
 }
-#center of the 42 shape (4, 2) to make calcuation of center in grid easier
-CENTER_42: set[tuple[int, int]] = {
-    (4, 2)
-}
 
 class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
@@ -54,9 +50,28 @@ class Grid:
         self.width = width
         self.height = height
         self.matrix = [[ALL for _ in range(width)] for _ in range(height)]
+        self.fixed: Set[Tuple[int, int]] = set()
 
-#wall remover method, removes specific walls based on where the algo is randomly moving to
+        # get the width and heigth of the pattern.
+        px_vals = [p[0] for p in PATTERN_42]
+        py_vals = [p[1] for p in PATTERN_42]
+        pattern_width = max(px_vals) - min(px_vals) + 1
+        pattern_height = max(py_vals) - min(py_vals) + 1
 
+        if self.width >= 10 and self.height >= 10:
+            # get where the pattern starts in the middle of the grid
+            ox = (self.width - pattern_width) // 2
+            oy = (self.height - pattern_height) // 2
+
+            # populate self.fixed with the locked cells of the pattern
+            self.fixed = {(ox + px, oy + py) for px, py in PATTERN_42}
+        else:
+            print("Error: Grid is too small to fit the 42 pattern.")
+    
+    def is_fixed_cell(self, x: int, y: int) -> bool:
+        return (x, y) in self.fixed
+    
+    #wall remover method, removes specific walls based on where the algo is randomly moving to
     def remove_wall(self, x: int, y: int, direction: int) -> None:
         #get coord movements and opposite wall from  DIRECTIONS cosnt
         dx, dy, opposite_wall = DIRECTIONS[direction]
