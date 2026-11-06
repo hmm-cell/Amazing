@@ -94,6 +94,51 @@ class Grid:
         self.matrix[y][x] &= ~direction
         self.matrix[ny][nx] &= ~opposite_wall
 
+    def generate_maze(self) -> None:
+
+        # Get all the unblocked cells
+        available_cells = [
+            (x, y)
+            for y in range(self.height)
+            for x in range(self.width)
+            if not self.is_fixed_cell(x, y)
+        ]
+        if not available_cells:
+            raise ValueError("There are no available cells")
+
+        # Choose the starting cell at random (for more variable maze designs)
+        start = random.choice(available_cells)
+        visited: Set[Tuple[int, int]] = {start}
+        stack: List[Tuple[int, int]] = [start]
+
+        while stack:
+            x, y = stack[-1]
+
+            # Find all valid neighbours (unvisited, inbounds and unblocked)
+            neighbours = []
+            for direction, (dx, dy, _) in DIRECTIONS.items():
+                nx = x + dx
+                ny = y + dy
+                if (
+                    0 <= nx < self.width
+                    and 0 <= ny < self.height
+                    and (nx, ny) not in visited
+                    and not self.is_fixed_cell(nx, ny)
+                ):
+                    neighbours.append((nx, ny, direction))
+
+            # Choose a neighbor and move in (agressively)
+            if neighbours:
+                nx, ny, direction = random.choice(neighbours)
+                self.remove_wall(x, y, direction)
+                visited.add((nx, ny))
+                stack.append((nx, ny))
+
+            # Go back if there's no neighbors
+            else:
+                stack.pop()
+
+
 #teste
 g = Grid(5, 3)
 g.remove_wall(2, 0, S)
