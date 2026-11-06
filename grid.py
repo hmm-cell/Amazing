@@ -24,6 +24,21 @@ DIRECTIONS: Dict[int, tuple[int, int, int]] = {
     W: (0, -1, E),
 }
 
+#cell PATTERN of 42 symbol with its coords
+
+PATTERN_42: Set[tuple[int, int]] = {
+    #4 shape
+    (0, 0), (1, 0), (2, 0),
+    (2, 1), (2, 2), (1, 2),
+    (0, 2), (3, 2), (4, 2),
+
+    #2 shape
+    (0, 5), (0, 6), (0, 7),
+    (1, 7), (2, 7), (2, 6),
+    (2, 5), (3, 5), (4, 5), 
+    (4, 6), (4, 7) 
+}
+
 class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
 
