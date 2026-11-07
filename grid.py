@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Set
+from typing import random, Dict, List, Tuple, Set
 
 #each orientation with its bit value
 N = 1 #wall at north 0001
