@@ -55,7 +55,7 @@ class Grid:
         #defaulting seed to NONE
 
         #if its still NONE (not selected locked seed in menu), get a random seed
-        if self.seed is None:
+        if seed is None:
             seed = random.randint(0, 999999)
         self.seed = seed
 
@@ -104,8 +104,6 @@ class Grid:
         self.matrix[y][x] &= ~direction
         self.matrix[ny][nx] &= ~opposite_wall
 
-        
-
     def generate_maze(self) -> None:
 
         # Get all the unblocked cells
@@ -150,6 +148,10 @@ class Grid:
             else:
                 stack.pop()
 
+    def hex_convert(self) -> str:
+        #convert values from ints inside list to hexadecimal str using join
+        converted_rows = ["".join(format(x, "X") for x in row) for row in self.matrix]
+        return "\n".join(converted_rows)
 
 #teste
 g = Grid(5, 3)
