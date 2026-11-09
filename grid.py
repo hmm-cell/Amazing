@@ -45,13 +45,22 @@ class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
 
 #grid generator method, it puts every cell of the matrix at ALL(15) value
-    def __init__(self, width: int, height: int):
+    def __init__(self, width: int, height: int, seed: Optional[int] = None):
         if width < 1 or height < 1:
             raise ValueError("width and height must be biigger than (idk yet)")
         self.width = width
         self.height = height
         self.matrix = [[ALL for _ in range(width)] for _ in range(height)]
         self.fixed: Set[Tuple[int, int]] = set()
+        #defaulting seed to NONE
+
+        #if its still NONE (not selected locked seed in menu), get a random seed
+        if self.seed is None:
+            seed = random.randint(0, 999999)
+        self.seed = seed
+
+        #atribute the seed value to rng object for the generator method
+        self.rng = random.Random(self.seed)
 
         # get the width and heigth of the pattern.
         px_vals = [p[0] for p in PATTERN_42]
@@ -68,7 +77,7 @@ class Grid:
             self.fixed = {(ox + px, oy + py) for px, py in PATTERN_42}
         else:
             print("Error: Grid is too small to fit the 42 pattern.")
-    
+
     def is_fixed_cell(self, x: int, y: int) -> bool:
         return (x, y) in self.fixed
     
@@ -95,6 +104,8 @@ class Grid:
         self.matrix[y][x] &= ~direction
         self.matrix[ny][nx] &= ~opposite_wall
 
+        
+
     def generate_maze(self) -> None:
 
         # Get all the unblocked cells
@@ -108,7 +119,7 @@ class Grid:
             raise ValueError("There are no available cells")
 
         # Choose the starting cell at random (for more variable maze designs)
-        start = random.choice(available_cells)
+        start = self.rng.choice(available_cells)
         visited: Set[Tuple[int, int]] = {start}
         stack: List[Tuple[int, int]] = [start]
 
@@ -130,7 +141,7 @@ class Grid:
 
             # Choose a neighbor and move in (agressively)
             if neighbours:
-                nx, ny, direction = random.choice(neighbours)
+                nx, ny, direction = self.rng.choice(neighbours)
                 self.remove_wall(x, y, direction)
                 visited.add((nx, ny))
                 stack.append((nx, ny))
