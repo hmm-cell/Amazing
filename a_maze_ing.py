@@ -1,6 +1,5 @@
 #this is where we will iimport everyhtiing
 from typing import Any
-from grid import Grid
 
 #grabs the confing txt and stores in a dict its values
 def config_parser(filepath: str) -> dict[str, Any]:
