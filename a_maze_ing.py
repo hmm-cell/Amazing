@@ -55,16 +55,23 @@ def validate_config(config: dict[str, Any]) -> None:
     REQUIRED_KEYS = "WIDTH HEIGHT ENTRY EXIT OUTPUT_FILE PERFECT".split()
     for key in REQUIRED_KEYS:
         if key not in config:
-            raise KeyError(f"Missing required configuration key: '{key}'")
-    #   IMPORTANT we need to MIN discuss dimentions AND MAX
-    if config["WIDTH"] <= 0:
-        raise ValueError(f"WIDTH must be greater than 0, got {config['WIDTH']}")
-    if config["HEIGHT"] <= 0:
-        raise ValueError(f"HEIGHT must be greater than 0, got {config['HEIGHT']}")
-    if config["ENTRY"]
+            raise ValueError(f"Missing required configuration key: '{key}'")
 
+    #   IMPORTANT we need to MIN discuss dimentions AND MAX
+
+    for name in ("WIDTH", "HEIGHT"):
+        if not isinstance(config[name], int) or (config[name] <= 0):
+            raise ValueError(f"{name} must be a positive integer, got {config[name]}")
+    
+    #verify is entry/exit tuple is filled with 2 ints
+    for name in ("ENTRY", "EXIT"):
+        if not isinstance(config[name], tuple) or len(config[name]) != 2:
+            raise ValueError(f"{name} must be two integers like 0,0, got {config[name]!r}")
 
     #VALIDATE IN-BOUNDS COORDS
-    for name, (x, y) in config[("ENTRY", config["ENTRY"])], config[("EXIT", config["EXIT"])]
-        if not (0 > x > config["WIDTH"] and 0 > y > config["HEIGHT"]):
+    for name in ("ENTRY", "EXIT"):
+        x, y = config[name]
+        if not (0 <= x < config["WIDTH"] and 0 <= y < config["HEIGHT"]):
             raise ValueError(f"{name} coordinates ({x}, {y}) are out of bounds")
+
+    
