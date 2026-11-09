@@ -50,15 +50,19 @@ def config_parser(filepath: str) -> dict[str, Any]:
     return config
 
 #all values in the dict must be validated and if wrong error must be raised for any
-def validate_config(self, config: dict[str, Any]) -> None:
+def validate_config(config: dict[str, Any]) -> None:
     #list with the correct keys names
     REQUIRED_KEYS = "WIDTH HEIGHT ENTRY EXIT OUTPUT_FILE PERFECT".split()
     for key in REQUIRED_KEYS:
         if key not in config:
             raise KeyError(f"Missing required configuration key: '{key}'")
     #   IMPORTANT we need to MIN discuss dimentions AND MAX
-    if config["WIDTH"] <= 0 or config["HEIGHT"] <= 0:
+    if config["WIDTH"] <= 0:
         raise ValueError(f"WIDTH must be greater than 0, got {config['WIDTH']}")
+    if config["HEIGHT"] <= 0:
+        raise ValueError(f"HEIGHT must be greater than 0, got {config['HEIGHT']}")
+    if config["ENTRY"]
+
 
     #VALIDATE IN-BOUNDS COORDS
     for name, (x, y) in config[("ENTRY", config["ENTRY"])], config[("EXIT", config["EXIT"])]
