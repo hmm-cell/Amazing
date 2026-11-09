@@ -50,7 +50,7 @@ def config_parser(filepath: str) -> dict[str, Any]:
     return config
 
 #all values in the dict must be validated and if wrong error must be raised for any
-def validate_config(self, dict: [str, Any]) -> None:
+def validate_config(self, config: dict[str, Any]) -> None:
     #list with the correct keys names
     REQUIRED_KEYS = "WIDTH HEIGHT ENTRY EXIT OUTPUT_FILE PERFECT".split()
     for key in REQUIRED_KEYS:
