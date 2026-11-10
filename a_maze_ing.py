@@ -5,6 +5,7 @@ from generator import Grid
 def main() -> None:
     #verify if only two args are received
     if len(sys.argv) != 2:
+<<<<<<< HEAD
         sys.stderr.write(f"Usage: python3 {sys.argv[0]} <config_file>\n")
         sys.exit(1)
     try:
@@ -18,3 +19,7 @@ def main() -> None:
         sys.exit(1)
 
 if __name__ == "__main__": main()
+=======
+        sys.stderr.write(f"Usage: python <{sys.argv[0]}>\n")
+        return
+>>>>>>> 54966a78b7c0607d130f1a54641f239d961d1d07
