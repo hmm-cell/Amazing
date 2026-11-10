@@ -18,5 +18,6 @@ def main() -> None:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
     print(grid.hex_convert())
+    #use python .\a_maze_ing.py .\config.txt to run
 
 if __name__ == "__main__": main()
