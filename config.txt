@@ -1,0 +1,16 @@
+# X axis
+WIDTH=25
+# Y axis
+HEIGHT=25
+# Entry point
+ENTRY=0,0
+# Exit point
+EXIT=24,24
+# File to output the solved maze
+OUTPUT_FILE=maze.txt
+# If the maze must be perfect
+PERFECT=True
+# Algorithm
+ALGORITHM=dfs
+# Seed for reproducible mazes
+SEED=45

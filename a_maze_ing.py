@@ -5,7 +5,6 @@ from generator import Grid
 def main() -> None:
     #verify if only two args are received
     if len(sys.argv) != 2:
-<<<<<<< HEAD
         sys.stderr.write(f"Usage: python3 {sys.argv[0]} <config_file>\n")
         sys.exit(1)
     try:
@@ -13,13 +12,11 @@ def main() -> None:
         config = config_parser(sys.argv[1])
         validate_config(config)
         #generate the maze
-        Grid(config["WIDTH"], config["HEIGHT"], config.get("SEED"))
+        grid = Grid(config["WIDTH"], config["HEIGHT"], config.get("SEED"))
+        grid.generate_maze()
     except (ValueError, FileNotFoundError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
+    print(grid.hex_convert())
 
 if __name__ == "__main__": main()
-=======
-        sys.stderr.write(f"Usage: python <{sys.argv[0]}>\n")
-        return
->>>>>>> 54966a78b7c0607d130f1a54641f239d961d1d07

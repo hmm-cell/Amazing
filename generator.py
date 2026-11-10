@@ -152,12 +152,3 @@ class Grid:
         #convert values from ints inside list to hexadecimal str using join
         converted_rows = ["".join(format(x, "X") for x in row) for row in self.matrix]
         return "\n".join(converted_rows)
-
-#teste
-g = Grid(5, 3)
-g.remove_wall(2, 0, S)
-print(g.matrix[0][2], g.matrix[1][2])   # expect 11 14
-try:
-    g.remove_wall(2, 0, N)
-except ValueError as e:
-    print("caught:", e)
