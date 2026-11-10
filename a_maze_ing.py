@@ -74,4 +74,14 @@ def validate_config(config: dict[str, Any]) -> None:
         if not (0 <= x < config["WIDTH"] and 0 <= y < config["HEIGHT"]):
             raise ValueError(f"{name} coordinates ({x}, {y}) are out of bounds")
 
-    
+    #validate if entry is diff from exit
+    if config["ENTRY"] == config["EXIT"]:
+        raise ValueError("ENTRY and EXIT must have differnt coordinates")
+
+    #validate if PERFECT IS BOOL
+    if not isinstance(config["PERFECT"], bool):
+        raise ValueError("PERFECT isnt a boolean value")
+
+    #verify is OUTPUT_FILE is str and not empty
+    if not isinstance(config["OUTPUT_FILE"], str) or not config["OUTPUT_FILE"].strip():
+        raise ValueError("OUTPUT_FILE must be a non-empty filename")
