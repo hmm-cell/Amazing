@@ -1,5 +1,4 @@
-#this is where we will iimport everyhtiing
-from typing import Any
+from typing import Any, Dict, Tuple
 
 #grabs the confing txt and stores in a dict its values
 def config_parser(filepath: str) -> dict[str, Any]:
