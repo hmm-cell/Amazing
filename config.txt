@@ -3,7 +3,7 @@ WIDTH=20
 # Y axis
 HEIGHT=15
 # Entry point
-ENTRY=8,6
+ENTRY=7,6
 # Exit point
 EXIT=19,14
 # File to output the solved maze

@@ -85,7 +85,7 @@ class Grid:
 
     # used to check if ENTRY or EXIT are inside of a fixed cell
     def check_entry_exit(self) -> bool:
-        for name, (x, y) in (("ENTRY", self.entry), ("EXIT", self.width)):
+        for name, (x, y) in (("ENTRY", self.entry), ("EXIT", self.exit)):
             if self.is_fixed_cell(x, y):
                 raise ValueError(f"{name} ({x}, {y}) is inside the 42 pattern")
     
