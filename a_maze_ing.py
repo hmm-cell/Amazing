@@ -12,9 +12,11 @@ def main() -> None:
         config = config_parser(sys.argv[1])
         validate_config(config)
         #generate the maze
-        grid = Grid(config["WIDTH"], config["HEIGHT"], config.get("SEED"))
+        grid = Grid(config["WIDTH"], config["HEIGHT"], config["ENTRY"], config["EXIT"], config.get("SEED"))
         grid.generate_maze()
-    except (ValueError, FileNotFoundError) as e:
+        #check if entry or exit inside 42 pattern
+        grid.check_entry_exit()
+    except (ValueError, OSError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
     print(grid.hex_convert())

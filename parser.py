@@ -40,7 +40,7 @@ def config_parser(filepath: str) -> dict[str, Any]:
                         try:
                             config[key] = tuple(map(int, value.split(",")))
                         except ValueError:
-                            raise (f"{line_num}: '{line}' has improper coordinate input")
+                            raise ValueError(f"{line_num}: '{line}' has improper coordinate input")
                     else:
                         try:
                             #convert str into int
@@ -106,3 +106,8 @@ def validate_config(config: dict[str, Any]) -> None:
     #verify is OUTPUT_FILE is str and not empty
     if not isinstance(config["OUTPUT_FILE"], str) or not config["OUTPUT_FILE"].strip():
         raise ValueError("OUTPUT_FILE must be a non-empty filename")
+
+    if "SEED" in config:
+        #verify SEED being an int
+        if not isinstance(config["SEED"], int) or isinstance(config["SEED"], bool):
+            raise ValueError(f"SEED must be an integer")

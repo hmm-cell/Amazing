@@ -45,15 +45,17 @@ class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
 
 #grid generator method, it puts every cell of the matrix at ALL(15) value
-    def __init__(self, width: int, height: int, seed: Optional[int] = None):
+    def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int], seed: Optional[int] = None):
         if width < 1 or height < 1:
             raise ValueError("width and height must be biigger than (idk yet)")
         self.width = width
         self.height = height
         self.matrix = [[ALL for _ in range(width)] for _ in range(height)]
         self.fixed: Set[Tuple[int, int]] = set()
-        #defaulting seed to NONE
+        self.entry = entry
+        self.exit = exit
 
+        #defaulting seed to NONE
         #if its still NONE (not selected locked seed in menu), get a random seed
         if seed is None:
             seed = random.randint(0, 999999)
@@ -80,10 +82,16 @@ class Grid:
 
     def is_fixed_cell(self, x: int, y: int) -> bool:
         return (x, y) in self.fixed
+
+    # used to check if ENTRY or EXIT are inside of a fixed cell
+    def check_entry_exit(self) -> bool:
+        for name, (x, y) in (("ENTRY", self.entry), ("EXIT", self.width)):
+            if self.is_fixed_cell(x, y):
+                raise ValueError(f"{name} ({x}, {y}) is inside the 42 pattern")
     
-    #wall remover method, removes specific walls based on where the algo is randomly moving to
+    # wall remover method, removes specific walls based on where the algo is randomly moving to
     def remove_wall(self, x: int, y: int, direction: int) -> None:
-        #get coord movements and opposite wall from  DIRECTIONS cosnt
+        # get coord movements and opposite wall from  DIRECTIONS cosnt
         dx, dy, opposite_wall = DIRECTIONS[direction]
 
         #go to the next direction
