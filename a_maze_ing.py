@@ -12,7 +12,8 @@ def main() -> None:
         config = config_parser(sys.argv[1])
         validate_config(config)
         #generate the maze
-        grid = Grid(config["WIDTH"], config["HEIGHT"], config["ENTRY"], config["EXIT"], config.get("SEED"))
+        grid = Grid(config["WIDTH"], config["HEIGHT"], config["ENTRY"],
+                     config["EXIT"], config.get("SEED"))
         grid.generate_maze()
         #check if entry or exit inside 42 pattern
         grid.check_entry_exit()
