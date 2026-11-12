@@ -47,7 +47,7 @@ class Grid:
     """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
 
 #grid generator method, it puts every cell of the matrix at ALL(15) value
-    def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int], seed: Optional[int] = None):
+    def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int], perfect: bool, seed: Optional[int] = None):
         if width < 1 or height < 1:
             raise ValueError("width and height must be biigger than (idk yet)")
         self.width = width
@@ -56,6 +56,7 @@ class Grid:
         self.fixed: Set[Tuple[int, int]] = set()
         self.entry = entry
         self.exit = exit
+        self.perfect = perfect
 
         #defaulting seed to NONE
         #if its still NONE (not selected locked seed in menu), get a random seed
@@ -113,6 +114,12 @@ class Grid:
         # but if its &1110 and the cell is 1110, nothing is changed!
         self.matrix[y][x] &= ~direction
         self.matrix[ny][nx] &= ~opposite_wall
+
+    def generate_maze(self) -> None:
+        if self.perfect:
+            self.perfect_maze()
+        else:
+            self.imperfect_maze()
 
     def perfect_maze(self) -> None:
 
