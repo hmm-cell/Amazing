@@ -8,6 +8,8 @@ S = 4 #wall at south 0100
 W = 8 #wall at wewst 1000
 ALL = N | E | S | W #all sides walled 1111
 
+LETTERS: dict[int, str] = {N: "N", E: "E", S: "S", W: "W"}
+
 # IMPORTANT. direction is used to determine where youll move to.
 
 # For example if youre at (x=2, y=3) and you move N youll end up at (x=2, y=2).

@@ -30,7 +30,7 @@ def config_parser(filepath: str) -> dict[str, Any]:
                     key = key.strip()
                     value = value.strip()
 
-                #for bool in PERFECT mode
+                    #for bool in PERFECT mode
                     if value.lower() in ("true", "false"):
                         #the equality == gives a bool val that gets
                         #attributed to the val of config key
