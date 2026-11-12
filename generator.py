@@ -116,6 +116,7 @@ class Grid:
         self.matrix[ny][nx] &= ~opposite_wall
 
     def generate_maze(self) -> None:
+        #helper function to choose perfect or imperfect as per config.txt
         if self.perfect:
             self.perfect_maze()
         else:

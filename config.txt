@@ -9,7 +9,7 @@ EXIT=19,14
 # File to output the solved maze
 OUTPUT_FILE=maze.txt
 # If the maze must be perfect
-PERFECT=True
+PERFECT=False
 # Algorithm
 ALGORITHM=dfs
 # Seed for reproducible mazes
