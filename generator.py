@@ -50,7 +50,7 @@ class Grid:
             raise ValueError("width and height must be biigger than (idk yet)")
         self.width = width
         self.height = height
-        self.matrix = [[ALL for _ in range(width)] for _ in range(height)]
+        self.matrix: List[List[int]] = [[ALL for _ in range(width)] for _ in range(height)]
         self.fixed: Set[Tuple[int, int]] = set()
         self.entry = entry
         self.exit = exit
@@ -83,7 +83,7 @@ class Grid:
     def is_fixed_cell(self, x: int, y: int) -> bool:
         return (x, y) in self.fixed
 
-    # used to check if ENTRY or EXIT are inside of a fixed cell
+    """Raise ValueError if ENTRY or EXIT is inside the 42 pattern."""
     def check_entry_exit(self) -> bool:
         for name, (x, y) in (("ENTRY", self.entry), ("EXIT", self.exit)):
             if self.is_fixed_cell(x, y):
