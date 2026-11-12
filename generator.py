@@ -114,7 +114,7 @@ class Grid:
         self.matrix[y][x] &= ~direction
         self.matrix[ny][nx] &= ~opposite_wall
 
-    def generate_maze(self) -> None:
+    def perfect_maze(self) -> None:
 
         # Get all the unblocked cells
         available_cells = [
@@ -157,6 +157,47 @@ class Grid:
             # Go back if there's no neighbors
             else:
                 stack.pop()
+
+        # Function is called with the amount of walls to be removed. (int)
+        def imperfect_maze(self, removed_walls: int = 10) -> None:
+        if extra_walls < 0:
+            raise ValueError("extra_walls cannot be negative")
+
+        # Generate perfect maze
+        self.generate_maze()
+
+        # Aknowledge possible walls to be removed
+        walls = []
+
+        for y in range(self.height):
+            for x in range(self.width):
+
+                if self.is_fixed_cell(x, y):
+                    continue
+
+                # Only two directions so there's no repetition
+                for direction in (E, S):
+                    dx, dy, _ = DIRECTIONS[direction]
+                    nx = x + dx
+                    ny = y + dy
+
+                    if not (0 <= nx < self.width and 0 <= ny < self.height):
+                        continue
+
+                    if self.is_fixed_cell(nx, ny):
+                        continue
+                        
+                    if self.matrix[y][x] & direction:
+                        walls.append((x, y, direction))
+
+        # Randomly choose removed_walls walls to remove
+        walls_to_remove = random.sample(
+            walls,
+            min(removed_walls, len(walls))
+        )
+
+        for x, y, direction in walls_to_remove:
+            self.remove_wall(x, y, direction)
 
     def hex_convert(self) -> str:
         #convert values from ints inside list to hexadecimal str using join
