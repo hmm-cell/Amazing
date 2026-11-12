@@ -158,8 +158,8 @@ class Grid:
             else:
                 stack.pop()
 
-        # Function is called with the amount of walls to be removed. (int)
-        def imperfect_maze(self, removed_walls: int = 10) -> None:
+    # Function is called with the amount of walls to be removed. (int)
+    def imperfect_maze(self, removed_walls: int = 10) -> None:
         if extra_walls < 0:
             raise ValueError("extra_walls cannot be negative")
 

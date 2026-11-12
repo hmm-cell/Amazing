@@ -1,6 +1,7 @@
 import sys
 from parser import config_parser, validate_config
 from generator import Grid
+from solver import solve_maze
 
 def main() -> None:
     #verify if only two args are received
@@ -14,13 +15,14 @@ def main() -> None:
         #generate the maze
         grid = Grid(config["WIDTH"], config["HEIGHT"], config["ENTRY"],
                      config["EXIT"], config.get("SEED"))
-        grid.generate_maze()
+        grid.perfect_maze()
         #check if entry or exit inside 42 pattern
         grid.check_entry_exit()
     except (ValueError, OSError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
     print(grid.hex_convert())
+    print(solve_maze(grid))
     #use python .\a_maze_ing.py .\config.txt to run
 
 if __name__ == "__main__": main()

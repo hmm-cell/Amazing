@@ -1,18 +1,14 @@
 from collections import deque
 from typing import Optional
+from generator import DIRECTIONS, LETTERS, Grid
 
-from generator import DIRECTIONS, LETTERS
-
-
-def solve_maze(
-    matrix: list[list[int]],
-    entry: tuple[int, int],
-    goal: tuple[int, int],
-) -> str:
+def solve_maze(grid: Grid) -> str:
     """Return the shortest path from entry to goal as N/E/S/W letters."""
-
-    height = len(matrix)
-    width = len(matrix[0])
+    height = grid.height
+    width = grid.width
+    matrix = grid.matrix
+    entry = grid.entry
+    goal = grid.exit
 
     parent: dict[
         tuple[int, int],
@@ -31,22 +27,25 @@ def solve_maze(
         if (x, y) == goal:
             break
 
-        for direction, (dx, dy, opposite_wall) in DIRECTIONS.items():
-            nx, ny = x + dx, y + dy
-            if (
-                0 <= nx < width
-                #if within width
-                and 0 <= ny < height
-                #if within height
-                and (nx, ny) in parent):
-                #if (nx, ny) != (x, y)
+        for direction, (dx, dy, _) in DIRECTIONS.items():
+            nx = x + dx
+            ny = y + dy
+
+            #skip if the neighbour is outside the grid
+            if nx < 0 or nx >= width or ny < 0 or ny >= height:
                 continue
 
             #skip if the current cell has a wall in this direction
             wall_bit = matrix[y][x] & direction
             if wall_bit != 0:
-                #register and queue the neighbour
-                parent[(nx, ny)] = ((x, y), direction)
+                continue
+
+            #skip if the neighbour was already found
+            if (nx, ny) in parent:
+                continue
+
+            # none of the skips applied: register and queue the neighbour
+            parent[(nx, ny)] = ((x, y), direction)
             queue.append((nx, ny))
 
     #if after cycle parent != exit
