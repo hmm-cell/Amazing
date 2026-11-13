@@ -13,4 +13,4 @@ PERFECT=False
 # Algorithm
 ALGORITHM=dfs
 # Seed for reproducible mazes
-SEED=1
+SEED=67

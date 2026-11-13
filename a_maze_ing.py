@@ -2,6 +2,7 @@ import sys
 from parser import config_parser, validate_config
 from generator import Grid
 from solver import solve_maze
+from output import write_output
 
 def main() -> None:
     #verify if only two args are received
@@ -22,7 +23,9 @@ def main() -> None:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
     print(grid.hex_convert())
-    print(solve_maze(grid))
+    path_solved = solve_maze(grid)
+    print(path_solved)
     #use python .\a_maze_ing.py .\config.txt to run
+    write_output(grid, path_solved, config["OUTPUT_FILE"])
 
 if __name__ == "__main__": main()

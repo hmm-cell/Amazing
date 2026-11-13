@@ -172,7 +172,7 @@ class Grid:
             raise ValueError("extra_walls cannot be negative")
 
         # Generate perfect maze
-        self.generate_maze()
+        self.perfect_maze()
 
         # Aknowledge possible walls to be removed
         walls = []
