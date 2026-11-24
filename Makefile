@@ -5,7 +5,6 @@ RUN = $(UV) run
 BUILD = $(UV) build
 CONFIG = config.txt
 MAIN = a_maze_ing.py
-SUBDIR = src
 CACHE = __pycache__ .mypy_cache .ruff_cache
 
 all: install

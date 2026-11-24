@@ -166,46 +166,89 @@ class Grid:
             else:
                 stack.pop()
 
+<<<<<<< HEAD
     # Function is called with the amount of walls to be removed. (int)
     def imperfect_maze(self, removed_walls: int = 10) -> None:
         if removed_walls < 0:
             raise ValueError("removed_walls cannot be negative")
+=======
+    # A function to determine whether the cell is a dead end or not
+    def is_it_dead_end(self, x: int, y: int) -> bool:
+        walls = self.matrix[y][x]
+        return ((4 - bin(walls).count("1")) == 1)
+>>>>>>> 65eceba25c1c8ff435b5322fbf9285c6ea03d69f
 
-        # Generate perfect maze
-        self.perfect_maze()
-
-        # Aknowledge possible walls to be removed
-        walls = []
+    # A function to make a list with all the dead ends
+    def get_dead_ends(self) -> List[Tuple[int, int]]:
+        dead_ends = []
+        # The two dead ends inside number 2 will be put here
+        special_ones = [((self.width - 7) // 2 + x, (self.height - 5) // 2 + y)
+                        for (x, y) in [(6, 3), (6, 1)]]
 
         for y in range(self.height):
             for x in range(self.width):
-
                 if self.is_fixed_cell(x, y):
                     continue
 
-                # Only two directions so there's no repetition
-                for direction in (E, S):
-                    dx, dy, _ = DIRECTIONS[direction]
+                if (x, y) in special_ones:
+                    continue
+
+                if self.is_it_dead_end(x, y):
+                    dead_ends.append((x, y))
+
+        return dead_ends
+
+    # A function to remove them. (there's two dead ends that can't be removed)
+    def remove_dead_ends(self) -> None:
+        dead_ends = self.get_dead_ends()
+
+        while dead_ends:
+            random.shuffle(dead_ends)
+            removed_wall = False
+
+            for x, y in dead_ends:
+                possible_walls = []
+
+                for direction, (dx, dy, _) in DIRECTIONS.items():
                     nx = x + dx
                     ny = y + dy
 
-                    if not (0 <= nx < self.width and 0 <= ny < self.height):
+                    if not (0 <= nx < self.width
+                            and 0 <= ny < self.height):
                         continue
 
                     if self.is_fixed_cell(nx, ny):
                         continue
-                        
-                    if self.matrix[y][x] & direction:
-                        walls.append((x, y, direction))
 
+                    # Making sure that the wall is not open yet
+                    if self.matrix[y][x] & direction:
+                        possible_walls.append(direction)
+
+<<<<<<< HEAD
         # Randomly choose removed_walls walls to remove
         walls_to_remove = self.rng.sample(
             walls,
             min(removed_walls, len(walls))
         )
+=======
+                if possible_walls:
+                    direction = random.choice(possible_walls)
+                    self.remove_wall(x, y, direction)
+                    removed_wall = True
+                    break
 
-        for x, y, direction in walls_to_remove:
-            self.remove_wall(x, y, direction)
+            if not removed_wall:
+                break
+
+            # In case one removal clears two dead ends, we get the list again.
+            # Instead of just removing a dead end when it's opened
+            dead_ends = self.get_dead_ends()
+
+    def imperfect_maze(self) -> None:
+        self.generate_maze()
+        self.remove_dead_ends()
+>>>>>>> 65eceba25c1c8ff435b5322fbf9285c6ea03d69f
+
 
     def hex_convert(self) -> str:
         #convert values from ints inside list to hexadecimal str using join
