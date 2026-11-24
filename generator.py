@@ -168,8 +168,8 @@ class Grid:
 
     # Function is called with the amount of walls to be removed. (int)
     def imperfect_maze(self, removed_walls: int = 10) -> None:
-        if extra_walls < 0:
-            raise ValueError("extra_walls cannot be negative")
+        if removed_walls < 0:
+            raise ValueError("removed_walls cannot be negative")
 
         # Generate perfect maze
         self.perfect_maze()
@@ -199,7 +199,7 @@ class Grid:
                         walls.append((x, y, direction))
 
         # Randomly choose removed_walls walls to remove
-        walls_to_remove = random.sample(
+        walls_to_remove = self.rng.sample(
             walls,
             min(removed_walls, len(walls))
         )
