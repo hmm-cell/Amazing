@@ -231,7 +231,7 @@ class Grid:
             dead_ends = self.get_dead_ends()
 
     def imperfect_maze(self) -> None:
-        self.generate_maze()
+        self.perfect_maze()
         self.remove_dead_ends()
 
 
