@@ -1,6 +1,6 @@
 from typing import Callable
 
-from amazing_maze.generator import DIRECTIONS, E, LETTERS, N, S, W, Grid
+from .generator import DIRECTIONS, E, LETTERS, N, S, W, Grid
 
 
 WALL_COLORS = {
