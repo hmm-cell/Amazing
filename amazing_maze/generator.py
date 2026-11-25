@@ -198,9 +198,33 @@ class Grid:
 
             dead_ends = self.get_dead_ends()
 
+    def open_corners(self) -> None:
+    corners = [
+        (0, 0, (E, S)),
+        (self.width - 1, 0, (W, S)),
+        (0, self.height - 1, (E, N)),
+        (self.width - 1, self.height - 1, (W, N))
+    ]
+
+    for x, y, directions in corners:
+        if self.is_fixed_cell(x, y):
+            continue
+
+        for direction in directions:
+            dx, dy, _ = DIRECTIONS[direction]
+            nx = x + dx
+            ny = y + dy
+
+            if self.is_fixed_cell(nx, ny):
+                continue
+
+            if self.matrix[y][x] & direction:
+                self.remove_wall(x, y, direction)
+
     def imperfect_maze(self) -> None:
         self.perfect_maze()
         self.remove_dead_ends()
+        self.open_corners()
 
     def hex_convert(self) -> str:
         converted_rows = [
