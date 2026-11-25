@@ -1,4 +1,4 @@
-PYTHON = python
+PYTHON = python3
 UV = uv
 INSTALL = $(UV) sync
 RUN = $(UV) run
