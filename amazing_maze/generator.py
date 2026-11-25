@@ -77,7 +77,7 @@ class Grid:
         return (x, y) in self.fixed
 
     """Raise ValueError if ENTRY or EXIT is inside the 42 pattern."""
-    def check_entry_exit(self) -> bool:
+    def check_entry_exit(self) -> None:
         for name, (x, y) in (("ENTRY", self.entry), ("EXIT", self.exit)):
             if self.is_fixed_cell(x, y):
                 raise ValueError(f"{name} ({x}, {y}) is inside the 42 pattern")

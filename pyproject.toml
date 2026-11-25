@@ -1,0 +1,13 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "amazing_maze"
+description = "A maze generator and solver"
+requires-python = ">=3.10"
+version = "0.1"
+dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["amazing_maze"]

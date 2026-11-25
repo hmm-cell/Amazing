@@ -1,10 +1,8 @@
 import sys
 
 from parser import config_parser, validate_config
-from generator import Grid
-from solver import solve_maze
 from display import run_display
-from output import write_output
+from amazing_maze import Grid, solve_maze, write_output
 
 
 def main() -> None:

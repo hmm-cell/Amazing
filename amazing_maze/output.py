@@ -1,4 +1,4 @@
-from generator import Grid
+from .generator import Grid
 
 
 def write_output(grid: Grid, path_solved: str, output_file: str) -> None:

@@ -1,7 +1,7 @@
 from collections import deque
 from typing import Optional
 
-from generator import DIRECTIONS, LETTERS, Grid
+from .generator import DIRECTIONS, LETTERS, Grid
 
 
 def solve_maze(grid: Grid) -> str:
