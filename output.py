@@ -1,6 +1,7 @@
 from generator import Grid
 
-def write_output(grid: Grid,path_solved: str, output_file: str) -> None:
+
+def write_output(grid: Grid, path_solved: str, output_file: str) -> None:
     """Write the maze, its entry, its exit and the shortest path to a file.
 
     Args:

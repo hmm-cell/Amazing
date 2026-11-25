@@ -1,25 +1,13 @@
 import random
 from typing import Dict, List, Tuple, Set, Optional
 
-#each orientation with its bit value
-N = 1 #wall at north 0001
-E = 2 #wall at east 0010
-S = 4 #wall at south 0100
-W = 8 #wall at wewst 1000
-ALL = N | E | S | W #all sides walled 1111
+N = 1  # Wall at north.
+E = 2  # Wall at east.
+S = 4  # Wall at south.
+W = 8  # Wall at west.
+ALL = N | E | S | W
 
 LETTERS: dict[int, str] = {N: "N", E: "E", S: "S", W: "W"}
-
-# IMPORTANT. direction is used to determine where youll move to.
-
-# For example if youre at (x=2, y=3) and you move N youll end up at (x=2, y=2).
-# Moving N from (2, 3) to (2, 2) means removing the N wall from (2, 3) and the S wall from (2, 2).
-# Hence N has S as the third value in the dict. It tells the future
-# wall remover function which wall to remove on the new cell.
-
-# This repeats for all directions with their respective opposite: (N-S), (W-E)
-# Everything in this project is (x, y): column first, then row.
-# The matrix itself is stored as matrix[y][x] (rows first), like the output file.
 
 DIRECTIONS: Dict[int, tuple[int, int, int]] = {
     N: (0, -1, S),
@@ -28,57 +16,59 @@ DIRECTIONS: Dict[int, tuple[int, int, int]] = {
     W: (-1, 0, E),
 }
 
-#cell PATTERN of 42 symbol with its coords (x, y)
-
 PATTERN_42: set[tuple[int, int]] = {
-    #4 shape
+    # 4 shape.
     (0, 0), (0, 1), (0, 2),
     (1, 2), (2, 2), (2, 1),
     (2, 0), (2, 3), (2, 4),
 
-    #2 shape
+    # 2 shape.
     (5, 0), (6, 0), (7, 0),
     (7, 1), (7, 2), (6, 2),
     (5, 2), (5, 3), (5, 4),
     (6, 4), (7, 4)
 }
 
-class Grid:
-    """Grid of CELLS in the matrix, each cell is 4bit to determine the value of the respective 4 walls"""
 
-#grid generator method, it puts every cell of the matrix at ALL(15) value
-    def __init__(self, width: int, height: int, entry: tuple[int, int], exit: tuple[int, int], perfect: bool, seed: Optional[int] = None):
+class Grid:
+    """Grid of cells, each represented by four wall bits."""
+
+    def __init__(
+        self,
+        width: int,
+        height: int,
+        entry: tuple[int, int],
+        exit: tuple[int, int],
+        perfect: bool,
+        seed: Optional[int] = None,
+    ):
         if width < 1 or height < 1:
-            raise ValueError("width and height must be biigger than (idk yet)")
+            raise ValueError("width and height must be positive")
         self.width = width
         self.height = height
-        self.matrix: List[List[int]] = [[ALL for _ in range(width)] for _ in range(height)]
+        self.matrix: List[List[int]] = [
+            [ALL for _ in range(width)] for _ in range(height)
+        ]
         self.fixed: Set[Tuple[int, int]] = set()
         self.entry = entry
         self.exit = exit
         self.perfect = perfect
 
-        #defaulting seed to NONE
-        #if its still NONE (not selected locked seed in menu), get a random seed
         if seed is None:
             seed = random.randint(0, 999999)
         self.seed = seed
 
-        #atribute the seed value to rng object for the generator method
         self.rng = random.Random(self.seed)
 
-        # get the width and heigth of the pattern.
         px_vals = [p[0] for p in PATTERN_42]
         py_vals = [p[1] for p in PATTERN_42]
         pattern_width = max(px_vals) - min(px_vals) + 1
         pattern_height = max(py_vals) - min(py_vals) + 1
 
         if self.width >= 10 and self.height >= 10:
-            # get where the pattern starts in the middle of the grid
             ox = (self.width - pattern_width) // 2
             oy = (self.height - pattern_height) // 2
 
-            # populate self.fixed with the locked cells of the pattern
             self.fixed = {(ox + px, oy + py) for px, py in PATTERN_42}
         else:
             print("Error: Grid is too small to fit the 42 pattern.")
@@ -91,40 +81,27 @@ class Grid:
         for name, (x, y) in (("ENTRY", self.entry), ("EXIT", self.exit)):
             if self.is_fixed_cell(x, y):
                 raise ValueError(f"{name} ({x}, {y}) is inside the 42 pattern")
-    
-    # wall remover method, removes specific walls based on where the algo is randomly moving to
-    def remove_wall(self, x: int, y: int, direction: int) -> None:
-        # get coord movements and opposite wall from  DIRECTIONS cosnt
-        dx, dy, opposite_wall = DIRECTIONS[direction]
 
-        #go to the next direction
+    def remove_wall(self, x: int, y: int, direction: int) -> None:
+        dx, dy, opposite_wall = DIRECTIONS[direction]
         nx = x + dx
         ny = y + dy
 
         if not ((0 <= nx < self.width) and (0 <= ny < self.height)):
             raise ValueError("out of bounds")
 
-        # call is_fixed_cell to know if we are inside a locked cell or going to a locked cell
-        # if in locked cell or going to a locked cell no removal of wall
         if self.is_fixed_cell(x, y) or self.is_fixed_cell(nx, ny):
             raise ValueError("going to locked cell or in locked cell")
-        
-        # remove wall from current cell! ~negative bitwise operator. ~0001 = 1110
-        # &operator is to check the ~direction vs the current cell and lets say 1111 to &1110 then we get 1110.
-        # but if its &1110 and the cell is 1110, nothing is changed!
         self.matrix[y][x] &= ~direction
         self.matrix[ny][nx] &= ~opposite_wall
 
     def generate_maze(self) -> None:
-        #helper function to choose perfect or imperfect as per config.txt
         if self.perfect:
             self.perfect_maze()
         else:
             self.imperfect_maze()
 
     def perfect_maze(self) -> None:
-
-        # Get all the unblocked cells
         available_cells = [
             (x, y)
             for y in range(self.height)
@@ -134,7 +111,6 @@ class Grid:
         if not available_cells:
             raise ValueError("There are no available cells")
 
-        # Choose the starting cell at random (for more variable maze designs)
         start = self.rng.choice(available_cells)
         visited: Set[Tuple[int, int]] = {start}
         stack: List[Tuple[int, int]] = [start]
@@ -142,7 +118,6 @@ class Grid:
         while stack:
             x, y = stack[-1]
 
-            # Find all valid neighbours (unvisited, inbounds and unblocked)
             neighbours = []
             for direction, (dx, dy, _) in DIRECTIONS.items():
                 nx = x + dx
@@ -155,28 +130,25 @@ class Grid:
                 ):
                     neighbours.append((nx, ny, direction))
 
-            # Choose a neighbor and move in (agressively)
             if neighbours:
                 nx, ny, direction = self.rng.choice(neighbours)
                 self.remove_wall(x, y, direction)
                 visited.add((nx, ny))
                 stack.append((nx, ny))
 
-            # Go back if there's no neighbors
             else:
                 stack.pop()
 
-    # A function to determine whether the cell is a dead end or not
     def is_it_dead_end(self, x: int, y: int) -> bool:
         walls = self.matrix[y][x]
         return ((4 - bin(walls).count("1")) == 1)
 
-    # A function to make a list with all the dead ends
     def get_dead_ends(self) -> List[Tuple[int, int]]:
         dead_ends = []
-        # The two dead ends inside number 2 will be put here
-        special_ones = [((self.width - 7) // 2 + x, (self.height - 5) // 2 + y)
-                        for (x, y) in [(6, 3), (6, 1)]]
+        special_ones = [
+            ((self.width - 7) // 2 + x, (self.height - 5) // 2 + y)
+            for x, y in [(6, 3), (6, 1)]
+        ]
 
         for y in range(self.height):
             for x in range(self.width):
@@ -191,12 +163,11 @@ class Grid:
 
         return dead_ends
 
-    # A function to remove them. (there's two dead ends that can't be removed)
     def remove_dead_ends(self) -> None:
         dead_ends = self.get_dead_ends()
 
         while dead_ends:
-            random.shuffle(dead_ends)
+            self.rng.shuffle(dead_ends)
             removed_wall = False
 
             for x, y in dead_ends:
@@ -213,12 +184,11 @@ class Grid:
                     if self.is_fixed_cell(nx, ny):
                         continue
 
-                    # Making sure that the wall is not open yet
                     if self.matrix[y][x] & direction:
                         possible_walls.append(direction)
 
                 if possible_walls:
-                    direction = random.choice(possible_walls)
+                    direction = self.rng.choice(possible_walls)
                     self.remove_wall(x, y, direction)
                     removed_wall = True
                     break
@@ -226,16 +196,14 @@ class Grid:
             if not removed_wall:
                 break
 
-            # In case one removal clears two dead ends, we get the list again.
-            # Instead of just removing a dead end when it's opened
             dead_ends = self.get_dead_ends()
 
     def imperfect_maze(self) -> None:
         self.perfect_maze()
         self.remove_dead_ends()
 
-
     def hex_convert(self) -> str:
-        #convert values from ints inside list to hexadecimal str using join
-        converted_rows = ["".join(format(x, "X") for x in row) for row in self.matrix]
+        converted_rows = [
+            "".join(format(x, "X") for x in row) for row in self.matrix
+        ]
         return "\n".join(converted_rows)

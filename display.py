@@ -29,7 +29,9 @@ def render_maze(
 
     path_cells = {grid.entry}
     x, y = grid.entry
-    direction_by_letter = {letter: direction for direction, letter in LETTERS.items()}
+    direction_by_letter = {
+        letter: direction for direction, letter in LETTERS.items()
+    }
     for letter in path_solved:
         dx, dy, _ = DIRECTIONS[direction_by_letter[letter]]
         x += dx
@@ -71,7 +73,7 @@ def render_maze(
 
 
 def run_display(create_maze: Callable[[bool], tuple[Grid, str]]) -> None:
-    """Show the maze and let the user control its path, color, and regeneration."""
+    """Show the maze and handle interactive controls."""
     grid, path_solved = create_maze(False)
     show_path = True
     wall_color = "white"
@@ -89,7 +91,9 @@ def run_display(create_maze: Callable[[bool], tuple[Grid, str]]) -> None:
         elif choice == "p":
             show_path = not show_path
         elif choice == "c":
-            print("Choose a color: " + ", ".join(WALL_COLORS))
+            print(
+                "Choose a color: " + ", ".join(WALL_COLORS)
+            )
             selected_color = input("> ").strip().lower()
             if selected_color in WALL_COLORS:
                 wall_color = selected_color
@@ -99,4 +103,3 @@ def run_display(create_maze: Callable[[bool], tuple[Grid, str]]) -> None:
             return
         else:
             input("Choose R, P, C, or Q. Press Enter to continue.")
-            

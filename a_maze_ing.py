@@ -1,17 +1,17 @@
 import sys
+
 from parser import config_parser, validate_config
 from generator import Grid
 from solver import solve_maze
 from display import run_display
 from output import write_output
 
+
 def main() -> None:
-    #verify if only two args are received
     if len(sys.argv) != 2:
         sys.stderr.write(f"Usage: python3 {sys.argv[0]} <config_file>\n")
         sys.exit(1)
     try:
-        #get the config.txt and validate it
         config = config_parser(sys.argv[1])
         validate_config(config)
 
@@ -36,4 +36,6 @@ def main() -> None:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
-if __name__ == "__main__": main()
+
+if __name__ == "__main__":
+    main()
