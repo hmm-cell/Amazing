@@ -93,6 +93,8 @@ Each configuration option must follow the `KEY=VALUE` format, with one option pe
 | `EXIT` | Exit coordinates `(x,y)` | `EXIT=19,14` |
 | `OUTPUT_FILE` | Name of the generated maze file | `OUTPUT_FILE=maze.txt` |
 | `PERFECT` | Selects perfect or imperfect generation | `PERFECT=False` |
+| `ALGORITHM` | Algorithm used for maze generation | `ALGORITHM=dfs` |
+| `SEED` | Seed number for maze generation | `SEED=20` |
 
 ### Example Configuration
 
@@ -285,6 +287,7 @@ A-Maze-ing/
 │   ├── solver.py
 ├── a_maze_ing.py
 ├── config.txt
+├── LICENSE.md
 ├── Makefile
 ├── parser.py
 ├── pyproject.toml
