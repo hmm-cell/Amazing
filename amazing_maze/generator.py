@@ -77,6 +77,7 @@ class Grid:
         return (x, y) in self.fixed
 
     """Raise ValueError if ENTRY or EXIT is inside the 42 pattern."""
+
     def check_entry_exit(self) -> None:
         for name, (x, y) in (("ENTRY", self.entry), ("EXIT", self.exit)):
             if self.is_fixed_cell(x, y):
@@ -205,19 +206,19 @@ class Grid:
             (0, self.height - 1, (E, N)),
             (self.width - 1, self.height - 1, (W, N))
         ]
-    
+
         for x, y, directions in corners:
             if self.is_fixed_cell(x, y):
                 continue
-    
+
             for direction in directions:
                 dx, dy, _ = DIRECTIONS[direction]
                 nx = x + dx
                 ny = y + dy
-    
+
                 if self.is_fixed_cell(nx, ny):
                     continue
-    
+
                 if self.matrix[y][x] & direction:
                     self.remove_wall(x, y, direction)
 
