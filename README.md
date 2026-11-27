@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by side-oli and dgalamba.*
+*This project has been created as part of the 42 curriculum by side-oli, dgalamba.*
 
 # A-Maze-ing
 
@@ -31,7 +31,7 @@ The generated maze also includes the 42 pattern, represented by fully closed cel
 - Maze visualization.
 - Reusable maze generation module.
 
-## Installation & Usage
+## Instructions
 
 ### Requirements
 
@@ -45,7 +45,7 @@ Clone the repository and install the project dependencies:
 
 ```bash
 git clone <repository-url>
-cd A-Maze-ing
+cd Amazing
 make install
 ```
 
@@ -110,8 +110,10 @@ EXIT=19,14
 # Output file
 OUTPUT_FILE=maze.txt
 
-# Generation mode
+# Generation options
 PERFECT=False
+ALGORITHM=dfs
+SEED=20
 ```
 
 ## Maze Generation Algorithms
@@ -239,7 +241,7 @@ The reusable module provides a `Grid` class responsible for creating and storing
 A basic usage example:
 
 ```python
-from <module_name> import Grid
+from amazing_maze import Grid
 
 # Create a grid
 grid = Grid(20, 15)
@@ -254,7 +256,7 @@ maze_matrix = grid.matrix
 To generate an imperfect maze instead:
 
 ```python
-from <module_name> import Grid
+from amazing_maze import Grid
 
 grid = Grid(20, 15)
 grid.imperfect_maze()
